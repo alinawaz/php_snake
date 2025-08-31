@@ -7,6 +7,8 @@ class MySqlTable
     private $table_name;
     private $columns = '*';
     private $where = [];
+    private $where_bind_types = '';
+    private $where_bind_values = [];
     private $limit = null;
     private $groupBy = null;
     private $orderBy = null;
@@ -37,13 +39,23 @@ class MySqlTable
 
     public function where($conditions)
     {
+        $values = [];
         foreach ($conditions as $col => $val) {
-            if (is_string($val)) {
-                $this->where[] = "$col = '" . $val . "'";
-            } else {
-                $this->where[] = "$col = " . $val;
-            }
+            $this->where[] = "$col = ?";
+            $values[] = $val;
         }
+
+        if (!empty($values)) {
+            $types = '';
+            foreach ($values as $v) {
+                if (is_int($v)) $types .= 'i';
+                elseif (is_float($v)) $types .= 'd';
+                else $types .= 's';
+            }
+            $this->where_bind_types = $types;
+            $this->where_bind_values = $values;
+        }
+
         return $this;
     }
 
@@ -84,6 +96,9 @@ class MySqlTable
         }
 
         $stmt = $this->conn->prepare($sql);
+        if ($this->where_bind_types != '' && !empty($this->where_bind_values)) {
+            $stmt->bind_param($this->where_bind_types, ...$this->where_bind_values);
+        }
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
@@ -104,7 +119,6 @@ class MySqlTable
                 foreach ($objects as $obj) {
                     $this->linkRelationalData($obj, $relation_names);
                 }
-
             }
         }
 
@@ -115,13 +129,11 @@ class MySqlTable
 
     private function linkRelationalData($item, $relation_names, $index = 0)
     {
-        // echo $index . ' > ' . count($relation_names) . '<br>';
-        if ($index > count($relation_names)-1) return;
+        if ($index > count($relation_names) - 1) return;
 
         $rel_name = $relation_names[$index];
         $lk = $rel_name . '_id';
         $model_name = ucfirst($rel_name) . 'Model';
-        // echo $rel_name . ' - ' . $model_name . ' - ' . $lk . '<br>';
         $item->$rel_name = model($model_name)->find($item->$lk);
 
         $this->linkRelationalData($item->$rel_name, $relation_names, ++$index);
@@ -142,6 +154,8 @@ class MySqlTable
         $this->groupBy = null;
         $this->orderBy = null;
         $this->link_relations = [];
+        $this->where_bind_types = '';
+        $this->where_bind_values = [];
         return $this;
     }
 
@@ -160,16 +174,21 @@ class MySqlTable
     {
         $columns = array_keys($data);
         $values = array_values($data);
-        foreach($values as $key => $value) {
-            if (is_string($value)) {
-                $values[$key] = "'" . $value . "'";
-            }
+        $placeholders = [];
+        $types = '';
+        foreach ($values as $key => $value) {
+            if (is_int($value)) $types .= 'i';
+            elseif (is_float($value)) $types .= 'd';
+            else $types .= 's';
+            $placeholders[] = '?';
         }
 
-        $sql_query = "INSERT INTO {$this->table_name} (" . implode(',', $columns) . ") VALUES (" . implode(',', $values) . ")";
-        var_dump($sql_query);
+        $sql_query = "INSERT INTO {$this->table_name} (" . implode(',', $columns) . ") VALUES (" . implode(',', $placeholders) . ")";
 
         $stmt = $this->conn->prepare($sql_query);
+        if (!empty($values)) {
+            $stmt->bind_param($types, ...$values);
+        }
         $stmt->execute();
         $insert_id = $stmt->insert_id;
         $stmt->close();
@@ -195,6 +214,9 @@ class MySqlTable
         }
 
         $stmt = $this->conn->prepare($sql);
+        if ($this->where_bind_types != '' && !empty($this->where_bind_values)) {
+            $stmt->bind_param($this->where_bind_types, ...$this->where_bind_values);
+        }
         $result = $stmt->execute();
         $stmt->close();
 
@@ -210,6 +232,9 @@ class MySqlTable
         }
 
         $stmt = $this->conn->prepare($sql);
+        if ($this->where_bind_types != '' && !empty($this->where_bind_values)) {
+            $stmt->bind_param($this->where_bind_types, ...$this->where_bind_values);
+        }
         $result = $stmt->execute();
         $stmt->close();
 
@@ -225,6 +250,9 @@ class MySqlTable
         }
 
         $stmt = $this->conn->prepare($sql);
+        if ($this->where_bind_types != '' && !empty($this->where_bind_values)) {
+            $stmt->bind_param($this->where_bind_types, ...$this->where_bind_values);
+        }
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
         $stmt->close();

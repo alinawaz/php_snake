@@ -1,9 +1,8 @@
 <?php
 /**
  * MySQL database connection and operations class
- * Homebank - Personal Banking Application php framework
+ * PHP Snake framework
  * (c) 2024 Ali Nawaz - MIT License
- * Uses Mysqli for connection and basic CRUD operations
  */
 class MySQL {
 
