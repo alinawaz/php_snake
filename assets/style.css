@@ -1,0 +1,366 @@
+body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
+h2 { color:#333; }
+form { margin:10px 0; }
+input, button { padding:8px; margin:5px 0; }
+table { background:white; border-collapse:collapse; margin-top:10px; }
+th, td { padding:10px; border:1px solid #ccc; }
+a { text-decoration:none; color:blue; }
+
+/* Background */
+.login-body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Container */
+.login-container {
+  background: #fff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+  width: 350px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Titles */
+.login-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+  color: #203a43;
+}
+.login-subtitle {
+  margin: 10px 0 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Form */
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+.login-form input:focus {
+  border-color: #2c5364;
+}
+
+/* Button */
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #203a43;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.login-form button:hover {
+  background: #2c5364;
+}
+
+/* Signup Link */
+.signup-link {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #444;
+}
+.signup-link a {
+  color: #203a43;
+  text-decoration: none;
+  font-weight: bold;
+}
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* Error */
+.error-msg {
+  margin-top: 15px;
+  color: #c0392b;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dashboard Layout */
+.dash-body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 210px;
+  background: #203a43;
+  color: #fff;
+  height: 100vh;
+  padding: 28px 18px;
+  box-sizing: border-box;
+  border-radius: 0 18px 18px 0;
+  box-shadow: 2px 0 16px rgba(32,58,67,0.07);
+}
+.sidebar h2 {
+  font-size: 19px;
+  margin-bottom: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar ul li {
+  margin: 10px 0; /* Reduced vertical spacing */
+}
+.sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  display: block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  font-weight: 500;
+}
+.sidebar ul li a.active,
+.sidebar ul li a:hover {
+  background: #2c5364;
+  color: #ffd700;
+}
+
+/* Main */
+.main-content {
+  flex: 1;
+  background: #f4f7fa;
+  padding: 30px;
+}
+.header {
+  margin-bottom: 25px;
+}
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #203a43;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #333;
+}
+.card p {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2c5364;
+}
+
+/* Active link highlight */
+.sidebar ul li a.active {
+  background: #2c5364;
+}
+
+/* Create Account Button */
+.create-form {
+  margin-bottom: 20px;
+}
+.create-form button {
+  background: #2c5364;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+.create-form button:hover {
+  background: #1b2e35;
+}
+
+/* Table - Awesome Modern Look (Refined) */
+.table-container {
+  background: #fff;
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(32,58,67,0.10);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 15px;
+  background: transparent;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(32,58,67,0.04);
+}
+
+thead tr {
+  background: linear-gradient(90deg, #203a43 0%, #2c5364 100%);
+}
+
+th {
+  color: #fff;
+  font-weight: 600;
+  padding: 14px 10px;
+  border: none;
+  letter-spacing: 0.5px;
+  font-size: 15px;
+  text-align: left; /* Align header text left */
+}
+
+td {
+  border: none;
+  padding: 12px 10px;
+  color: #203a43;
+  background: #f8fafc;
+  font-size: 15px;
+  transition: background 0.2s;
+  text-align: left; /* Align cell text left */
+}
+
+tbody tr {
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(32,58,67,0.03);
+}
+
+tbody tr:hover td {
+  background: #e3e9f1;
+}
+
+.approve-btn, .decline-btn, .view-card-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin: 0 2px;
+  box-shadow: 0 2px 8px rgba(32,58,67,0.07);
+}
+
+.approve-btn {
+  background: linear-gradient(90deg, #28a745 0%, #218838 100%);
+  color: #fff;
+}
+
+.approve-btn:hover {
+  background: linear-gradient(90deg, #218838 0%, #28a745 100%);
+  box-shadow: 0 4px 12px rgba(40,167,69,0.15);
+}
+
+.decline-btn {
+  background: linear-gradient(90deg, #c0392b 0%, #a93226 100%);
+  color: #fff;
+}
+
+.decline-btn:hover {
+  background: linear-gradient(90deg, #a93226 0%, #c0392b 100%);
+  box-shadow: 0 4px 12px rgba(192,57,43,0.15);
+}
+
+.view-card-btn {
+  background: linear-gradient(90deg, #203a43 0%, #2c5364 100%);
+  color: #fff;
+}
+
+.view-card-btn:hover {
+  background: linear-gradient(90deg, #2c5364 0%, #203a43 100%);
+  box-shadow: 0 4px 12px rgba(32,58,67,0.15);
+}
+
+/* Rounded corners for first/last cells */
+th:first-child, td:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+th:last-child, td:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* ...keep rest of your CSS... */
+
+.credit-card {
+  width: 350px;
+  height: 200px;
+  border-radius: 15px;
+  padding: 20px;
+  color: white;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  font-family: 'Arial', sans-serif;
+  margin-top: 20px;
+  position: relative;
+}
+
+.credit-card .chip {
+  width: 50px;
+  height: 35px;
+  background: gold;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.credit-card .card-number {
+  font-size: 20px;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+}
+
+.credit-card .card-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.credit-card .card-holder {
+  position: absolute;
+  bottom: 15px;
+  left: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
