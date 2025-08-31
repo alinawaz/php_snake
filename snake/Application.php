@@ -8,8 +8,7 @@ namespace Snake;
 use Snake\Http\Router;
 use Snake\Database\MySQL;
 
-// Loading MySql Database class & making it globally available
-global $db;
+use Doctrine\Inflector\InflectorFactory;
 
 
 class Application
@@ -18,12 +17,13 @@ class Application
     private $database_config;
     private $app_config;
 
-    public function boot() {
+    public function boot()
+    {
 
         $this->loadConfigs();
         $this->setupDatabase();
+        $this->packages();
         $this->setupRouting();
-
     }
 
     public function loadConfigs()
@@ -41,12 +41,19 @@ class Application
         }
     }
 
-    public function setupRouting() {
+    public function setupRouting()
+    {
 
         // loading user web routes
         loadFile('app.routes.web');
 
         // Running routes
         Router::dispatch();
+    }
+
+    public function packages()
+    {
+        global $inflector;
+        $inflector = InflectorFactory::create()->build();
     }
 }

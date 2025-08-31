@@ -37,8 +37,8 @@ class MySqlModel {
         return static::query()->get();
     }
 
-    public static function where($conditions) {
-        return static::query()->where($conditions);
+    public static function where($conditions_or_key, $value = NULL) {
+        return static::query()->where($conditions_or_key, $value);
     }
 
     public static function create($data) {
@@ -48,6 +48,11 @@ class MySqlModel {
     public static function link($relation) {
         return static::query()->link($relation);
     }
+
+    public static function populate($relation) {
+        return static::query()->populate($relation);
+    }
+
 
     public static function update($id, $data) {
         return static::query()->where(['id' => $id])->update($data);

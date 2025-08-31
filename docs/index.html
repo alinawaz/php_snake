@@ -1,349 +1,97 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MySqlTable ORM — Docs (Alpha)</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#155e75', 900: '#164e63'
-            }
-          },
-          boxShadow: {
-            floating: '0 10px 30px rgba(2, 6, 23, 0.18)'
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Framework - Documentation (Alpha)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind Dark Mode
+        tailwind.config = {
+            darkMode: 'class'
         }
-      }
-    }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root { --bg: #0b1220; }
-    html { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif; }
-    code, pre { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .prose pre { background: #0b172a; }
-    .glass { backdrop-filter: blur(10px); background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); border: 1px solid rgba(255,255,255,.12); }
-  </style>
-  <!-- Highlight.js for code syntax -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+    </script>
 </head>
-<body class="bg-slate-950 text-slate-100">
-  <!-- Top Nav -->
-  <header class="sticky top-0 z-50">
-    <div class="bg-gradient-to-r from-primary-700 via-primary-600 to-primary-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="h-9 w-9 rounded-xl bg-white/10 flex items-center justify-center ring-1 ring-white/20 shadow-floating">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
-              <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14.59L8.41 12 10 10.41l3 3 5-5L19.59 10 13 16.59z"/>
-            </svg>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h1 class="text-xl font-bold tracking-tight">MySqlTable ORM</h1>
-              <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/15 ring-1 ring-white/20">alpha</span>
-            </div>
-            <p class="text-white/70 text-sm">Lightweight PHP ORM — fluent, simple, pragmatic</p>
-          </div>
+
+<body class="bg-gray-900 text-gray-200 font-sans antialiased">
+
+    <!-- Header -->
+    <header class="border-b border-gray-700 bg-gray-950 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <h1 class="text-xl font-bold tracking-wide text-green-400">Snake <span class="text-gray-400">Docs</span>
+            </h1>
+            <nav class="space-x-6 text-gray-300">
+                <a href="#" class="hover:text-green-400">Getting Started</a>
+                <a href="#" class="hover:text-green-400">Database</a>
+                <a href="#" class="hover:text-green-400">Routing</a>
+                <a href="#" class="hover:text-green-400">API</a>
+            </nav>
         </div>
-        <div class="hidden md:flex items-center gap-3">
-          <div class="relative">
-            <input id="doc-search" placeholder="Search docs…" class="w-72 rounded-xl bg-white/10 ring-1 ring-white/20 px-4 py-2 text-sm placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/40" />
-            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-white/50">/</span>
-          </div>
-          <button id="themeToggle" class="rounded-xl bg-white/10 hover:bg-white/15 ring-1 ring-white/20 px-3 py-2 text-sm">Toggle theme</button>
-          <a href="#getting-started" class="rounded-xl bg-white text-slate-900 hover:bg-slate-100 px-3 py-2 text-sm font-medium">Get Started</a>
-        </div>
-      </div>
+    </header>
+
+    <!-- Sidebar + Content -->
+    <div class="max-w-7xl mx-auto flex">
+
+        <!-- Sidebar -->
+        <aside class="hidden md:block w-64 border-r border-gray-800 p-6">
+            <h2 class="text-sm uppercase tracking-wide text-gray-400 mb-4">Documentation</h2>
+            <ul class="space-y-2">
+                <li><a href="#" class="block px-2 py-1 rounded hover:bg-gray-800">Introduction</a></li>
+                <li><a href="#" class="block px-2 py-1 rounded hover:bg-gray-800">Installation</a></li>
+                <li><a href="#" class="block px-2 py-1 rounded hover:bg-gray-800">Configuration</a></li>
+                <li><a href="#" class="block px-2 py-1 rounded hover:bg-gray-800">Database (MySqlTable)</a></li>
+                <li><a href="#" class="block px-2 py-1 rounded hover:bg-gray-800">Routing</a></li>
+                <li><a href="#" class="block px-2 py-1 rounded hover:bg-gray-800">Controllers</a></li>
+                <li><a href="#" class="block px-2 py-1 rounded hover:bg-gray-800">Models</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <article class="prose prose-invert max-w-none">
+                <h1 class="text-3xl font-bold text-green-400">Welcome to Snake Framework</h1>
+                <p class="text-gray-400">Snake is a lightweight, modern PHP framework currently in
+                    <strong>Alpha</strong>. It is designed for speed, simplicity, and developer happiness.</p>
+
+                <h2 class="text-2xl font-semibold text-gray-200 mt-10">⚡ Quick Start</h2>
+                <pre class="bg-gray-800 text-green-300 p-4 rounded-lg overflow-x-auto text-sm">
+composer create-project snake/framework project-name --stability=alpha
+        </pre>
+
+                <h2 class="text-2xl font-semibold text-gray-200 mt-10">📦 Database - MySqlTable</h2>
+                <p class="text-gray-400">The <code class="text-green-400">Snake\Database\MySql\Table</code> class allows
+                    you to define and interact with your MySQL tables using a fluent, expressive syntax.</p>
+
+                <pre class="bg-gray-800 text-green-300 p-4 rounded-lg overflow-x-auto text-sm">
+use Snake\Database\MySql\Table;
+
+$table = new Table('users');
+$table->addColumn('id', 'int')->primary();
+$table->addColumn('name', 'string');
+$table->addColumn('email', 'string')->unique();
+$table->create();
+        </pre>
+
+                <p class="text-gray-400">This will generate a new <code>users</code> table with the specified schema.
+                    You can also modify, drop, or query tables fluently.</p>
+
+                <h2 class="text-2xl font-semibold text-gray-200 mt-10">🚀 Roadmap</h2>
+                <ul class="list-disc list-inside text-gray-400">
+                    <li>Routing & Middleware</li>
+                    <li>ORM for Models</li>
+                    <li>CLI Tooling</li>
+                    <li>Unit Testing with Snake\Test</li>
+                </ul>
+            </article>
+        </main>
     </div>
-  </header>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 py-8">
-    <!-- Sidebar -->
-    <aside class="lg:col-span-3 xl:col-span-2 lg:sticky lg:top-24 h-max">
-      <nav class="glass rounded-2xl p-4 text-sm">
-        <p class="uppercase tracking-wider text-white/60 text-xs mb-2">On this page</p>
-        <ul class="space-y-1" id="toc">
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#intro">Introduction</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#installation">Installation</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#quickstart">Quickstart</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#api">API Reference</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#relations">Eager Loading</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#examples">Examples</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#best-practices">Best Practices</a></li>
-          <li><a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="#roadmap">Roadmap</a></li>
-        </ul>
-      </nav>
-    </aside>
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-6 mt-12 text-center text-sm text-gray-500">
+        Snake Framework (Alpha) · Built with ❤️ by Developers
+    </footer>
 
-    <!-- Content -->
-    <section class="lg:col-span-9 xl:col-span-8 prose prose-invert prose-pre:rounded-xl prose-pre:shadow-floating prose-headings:scroll-mt-24">
-
-      <!-- Hero -->
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 ring-1 ring-white/10 p-8 mb-8">
-        <div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary-500/20 blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-32 h-64 w-64 rounded-full bg-primary-700/10 blur-3xl"></div>
-        <h2 id="intro" class="mt-0 text-3xl font-extrabold">MySqlTable ORM</h2>
-        <p class="text-white/75 text-lg max-w-3xl">A tiny, chainable PHP ORM powering expressive queries with a familiar, Laravel‑inspired API. Designed for speed and clarity while your full ORM is under development.</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="inline-flex items-center gap-2 text-xs bg-white/10 ring-1 ring-white/10 rounded-full px-3 py-1"><span class="h-2 w-2 rounded-full bg-emerald-400"></span> Production‑ready reads</span>
-          <span class="inline-flex items-center gap-2 text-xs bg-white/10 ring-1 ring-white/10 rounded-full px-3 py-1"><span class="h-2 w-2 rounded-full bg-amber-400"></span> Writes are basic</span>
-          <span class="inline-flex items-center gap-2 text-xs bg-white/10 ring-1 ring-white/10 rounded-full px-3 py-1"><span class="h-2 w-2 rounded-full bg-sky-400"></span> Eager loading (link)</span>
-        </div>
-      </div>
-
-      <h3 id="installation">Installation</h3>
-      <p>Drop the <code>MySqlTable</code> class into your project and provide a global <code>$db</code> with a <code>getConnection()</code> method that returns a <code>mysqli</code> connection. Models should extend this class.</p>
-
-      <pre><code class="language-php">&lt;?php
-// db.php
-class DB { public function getConnection() { /* return mysqli */ } }
-$db = new DB();
-
-// Base model
-abstract class BaseModel extends MySqlTable {
-    public function __construct() { parent::__construct(static::$table); }
-    public function find($id) { return $this-&gt;where(['id' =&gt; $id])-&gt;first(); }
-}
-
-class AccountModel extends BaseModel { protected static $table = 'accounts'; }
-?&gt;</code></pre>
-
-      <h3 id="quickstart">Quickstart</h3>
-      <pre><code class="language-php">$accounts = model('AccountModel')
-    -&gt;select(['id','name'])
-    -&gt;where(['status' =&gt; 'active'])
-    -&gt;sort_by('created_at','DESC')
-    -&gt;limit(10)
-    -&gt;get();
-
-$first = model('AccountModel')-&gt;where(['email' =&gt; 'a@b.com'])-&gt;first();</code></pre>
-
-      <h3 id="api">API Reference</h3>
-
-      <div class="not-prose grid md:grid-cols-2 gap-4 my-6">
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">Constructor</h4>
-          <p class="text-white/70 text-sm mb-3"><code>__construct(string $table)</code> — sets the target table and grabs a mysqli connection from global <code>$db</code>.</p>
-          <pre><code class="language-php">new MySqlTable('users');</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">select()</h4>
-          <p class="text-white/70 text-sm mb-3">Choose columns. Accepts <code>string</code> or <code>array</code>. Defaults to <code>*</code>.</p>
-          <pre><code class="language-php">-&gt;select(['id','name'])</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">where()</h4>
-          <p class="text-white/70 text-sm mb-3">Add ANDed equality conditions from an associative array.</p>
-          <pre><code class="language-php">-&gt;where(['status' =&gt; 'active', 'account_id' =&gt; 7])</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">group_by()</h4>
-          <p class="text-white/70 text-sm mb-3">Group results by a column.</p>
-          <pre><code class="language-php">-&gt;group_by('role')</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">sort_by()</h4>
-          <p class="text-white/70 text-sm mb-3">Order by column and direction (<code>ASC</code>|<code>DESC</code>).</p>
-          <pre><code class="language-php">-&gt;sort_by('created_at','DESC')</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">limit()</h4>
-          <p class="text-white/70 text-sm mb-3">Limit the number of rows returned.</p>
-          <pre><code class="language-php">-&gt;limit(25)</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">get()</h4>
-          <p class="text-white/70 text-sm mb-3">Run the built SELECT and return an array of row objects. Resets the builder.</p>
-          <pre><code class="language-php">-&gt;get()</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">first()</h4>
-          <p class="text-white/70 text-sm mb-3">Convenience for a single row (adds <code>LIMIT 1</code>).</p>
-          <pre><code class="language-php">-&gt;first()</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">insert()</h4>
-          <p class="text-white/70 text-sm mb-3">Insert a row and return the inserted object (by re‑querying with the new ID).</p>
-          <pre><code class="language-php">$user = model('UserModel')-&gt;insert([
-  'name' =&gt; 'Ali',
-  'email' =&gt; 'ali@example.com',
-]);</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">update()</h4>
-          <p class="text-white/70 text-sm mb-3">Update based on current <code>where()</code> conditions. Returns boolean.</p>
-          <pre><code class="language-php">model('UserModel')
-  -&gt;where(['id' =&gt; 5])
-  -&gt;update(['name' =&gt; 'New Name']);</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">delete()</h4>
-          <p class="text-white/70 text-sm mb-3">Delete rows matching the current <code>where()</code>. Returns boolean.</p>
-          <pre><code class="language-php">model('UserModel')-&gt;where(['status' =&gt; 'inactive'])-&gt;delete();</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">count()</h4>
-          <p class="text-white/70 text-sm mb-3">Return integer count of rows for current criteria.</p>
-          <pre><code class="language-php">$pending = model('TxnModel')-&gt;where(['status' =&gt; 'pending'])-&gt;count();</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">all()</h4>
-          <p class="text-white/70 text-sm mb-3">Fetch all rows from the table (resets internal state first).</p>
-          <pre><code class="language-php">$users = model('UserModel')-&gt;all();</code></pre>
-        </div>
-        <div class="glass rounded-2xl p-4 md:col-span-2">
-          <h4 class="font-semibold">rawQuery()</h4>
-          <p class="text-white/70 text-sm mb-3">Execute a raw SQL statement and get an array of associative arrays.</p>
-          <pre><code class="language-php">$rows = model('UserModel')-&gt;rawQuery('SELECT id, email FROM users WHERE email LIKE "%@example.com"');</code></pre>
-        </div>
-      </div>
-
-      <h3 id="relations">Eager Loading with <code>link()</code></h3>
-      <p>Preload nested relationships using a dotted path. For each relation segment, the ORM expects a foreign key named <code>&lt;relation&gt;_id</code> on the current object and resolves it using a model named <code>Ucfirst(relation)Model</code>. Relations are attached as nested properties.</p>
-
-      <pre><code class="language-php">$txns = model('TransactionModel')
-  -&gt;link('account.user')
-  -&gt;where(['status' =&gt; 'pending'])
-  -&gt;sort_by('created_at','DESC')
-  -&gt;get();
-
-// Accessing
-$txns[0]-&gt;account; // Account object
-$txns[0]-&gt;account-&gt;user; // User object</code></pre>
-
-      <div class="glass rounded-2xl p-5">
-        <h4 class="font-semibold mt-0">How it works</h4>
-        <ol class="list-decimal pl-5 text-white/80">
-          <li><code>get()</code> executes the main query and builds row objects.</li>
-          <li>For each path in <code>link()</code>, it recursively resolves <code>segment_id</code> via <code>model('{Segment}Model')-&gt;find()</code>.</li>
-          <li>Resolved models are attached to the parent object under the segment name.</li>
-        </ol>
-      </div>
-
-      <h3 id="examples">Controller Example</h3>
-      <pre><code class="language-php">&lt;?php
-class DashboardController
-{
-  public function adminDashboard($request, $response)
-  {
-    $accounts = model('AccountModel')-&gt;all();
-
-    foreach ($accounts as $account) {
-      $account-&gt;cards = model('CardModel')
-        -&gt;where(['account_id' =&gt; $account-&gt;id])
-        -&gt;get();
-
-      $account-&gt;apps = model('AppModel')
-        -&gt;select(['id','name','status'])
-        -&gt;where(['account_id' =&gt; $account-&gt;id])
-        -&gt;get();
-    }
-
-    $pending_txns = model('TransactionModel')
-      -&gt;link('account.user')
-      -&gt;where(['status' =&gt; 'pending'])
-      -&gt;sort_by('created_at','DESC')
-      -&gt;get();
-
-    return $response-&gt;view('admin.dashboard', [
-      'user' =&gt; $request-&gt;user,
-      'accounts' =&gt; $accounts,
-      'pending_txns' =&gt; $pending_txns
-    ]);
-  }
-}
-?&gt;</code></pre>
-
-      <h3 id="best-practices">Best Practices & Notes</h3>
-      <div class="not-prose grid md:grid-cols-2 gap-4">
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">State Management</h4>
-          <p class="text-white/70 text-sm">Each terminal call (<code>get()</code>, <code>first()</code>, <code>update()</code>, <code>delete()</code>, <code>count()</code>, <code>all()</code>) resets the builder via <code>reset()</code>. Chain fresh conditions after each call.</p>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">SQL Safety (Important)</h4>
-          <p class="text-white/70 text-sm">Current implementation concatenates values into SQL. Prefer prepared statements with bound parameters to avoid injection and quoting issues. Plan to migrate <code>where()</code>, <code>insert()</code>, and <code>update()</code> to bindings.</p>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">Naming Conventions</h4>
-          <p class="text-white/70 text-sm">Relations expect <code>segment_id</code> fields and corresponding <code>{Segment}Model</code> classes with a <code>find($id)</code> method.</p>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <h4 class="font-semibold">Pagination</h4>
-          <p class="text-white/70 text-sm">Use <code>limit()</code> + <code>sort_by()</code> for simple pagination. A dedicated <code>paginate()</code> helper is on the roadmap.</p>
-        </div>
-      </div>
-
-      <h3 id="roadmap">Roadmap</h3>
-      <ul>
-        <li>Parameter bindings for <code>where</code>, <code>insert</code>, <code>update</code></li>
-        <li>Joins & OR conditions</li>
-        <li>Soft deletes & timestamps</li>
-        <li>Query events & logging</li>
-        <li>Pagination helper</li>
-        <li>Validation layer</li>
-      </ul>
-
-      <hr class="border-white/10 my-10" />
-
-      <footer class="text-sm text-white/50">
-        <p>© <span id="year"></span> MySqlTable ORM. Built with ❤️ for simplicity. Inspired by Laravel’s delightful DX.</p>
-      </footer>
-    </section>
-
-    <!-- Right rail (empty for now) -->
-    <aside class="hidden xl:block xl:col-span-2"></aside>
-  </main>
-
-  <!-- Floating feedback button -->
-  <button class="fixed bottom-6 right-6 px-4 py-2 rounded-full bg-primary-600 hover:bg-primary-500 shadow-floating text-sm">Give Feedback</button>
-
-  <script>
-    // Theme toggle
-    const toggle = document.getElementById('themeToggle');
-    toggle?.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      document.body.classList.toggle('bg-white');
-      document.body.classList.toggle('text-slate-900');
-    });
-
-    // Simple search (client-only): jump to first heading that matches
-    const search = document.getElementById('doc-search');
-    search?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === '/') {
-        const q = search.value.trim().toLowerCase();
-        if (!q) return;
-        const targets = Array.from(document.querySelectorAll('h2, h3, h4')).filter(h => h.textContent.toLowerCase().includes(q));
-        if (targets[0]) targets[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-
-    // Copy buttons for code blocks
-    document.querySelectorAll('pre').forEach(pre => {
-      const btn = document.createElement('button');
-      btn.textContent = 'Copy';
-      btn.className = 'absolute right-3 top-3 text-xs px-2 py-1 rounded bg-white/10 hover:bg-white/20 ring-1 ring-white/20';
-      pre.classList.add('relative');
-      pre.appendChild(btn);
-      btn.addEventListener('click', async () => {
-        const code = pre.querySelector('code')?.innerText ?? '';
-        try { await navigator.clipboard.writeText(code); btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1200); } catch {}
-      });
-    });
-
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
+
 </html>

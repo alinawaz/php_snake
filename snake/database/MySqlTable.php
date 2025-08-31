@@ -15,6 +15,7 @@ class MySqlTable
     private $groupBy = null;
     private $orderBy = null;
     private $link_relations = [];
+    private $populate_relations = [];
 
     public function __construct($table_name)
     {
@@ -23,9 +24,29 @@ class MySqlTable
         $this->table_name = $table_name;
     }
 
+    public function reset()
+    {
+        $this->columns = '*';
+        $this->where = [];
+        $this->limit = null;
+        $this->groupBy = null;
+        $this->orderBy = null;
+        $this->link_relations = [];
+        $this->populate_relations = [];
+        $this->where_bind_types = '';
+        $this->where_bind_values = [];
+        return $this;
+    }
+
     public function link($relation)
     {
         $this->link_relations[] = $relation;
+        return $this;
+    }
+
+    public function populate($relation)
+    {
+        $this->populate_relations[] = $relation;
         return $this;
     }
 
@@ -39,23 +60,33 @@ class MySqlTable
         return $this;
     }
 
-    public function where($conditions)
+    public function where($conditions_or_key, $value = NULL)
     {
-        $values = [];
-        foreach ($conditions as $col => $val) {
-            $this->where[] = "$col = ?";
-            $values[] = $val;
-        }
-
-        if (!empty($values)) {
-            $types = '';
-            foreach ($values as $v) {
-                if (is_int($v)) $types .= 'i';
-                elseif (is_float($v)) $types .= 'd';
-                else $types .= 's';
+        if (is_string($conditions_or_key) && $value != NULL) {
+            $this->where[] = "$conditions_or_key = ?";
+            $type = '';
+            if (is_int($value)) $type = 'i';
+            elseif (is_float($value)) $type = 'd';
+            else $type = 's';
+            $this->where_bind_types = $type;
+            $this->where_bind_values = [$value];
+        } else {
+            $values = [];
+            foreach ($conditions_or_key as $col => $val) {
+                $this->where[] = "$col = ?";
+                $values[] = $val;
             }
-            $this->where_bind_types = $types;
-            $this->where_bind_values = $values;
+
+            if (!empty($values)) {
+                $types = '';
+                foreach ($values as $v) {
+                    if (is_int($v)) $types .= 'i';
+                    elseif (is_float($v)) $types .= 'd';
+                    else $types .= 's';
+                }
+                $this->where_bind_types = $types;
+                $this->where_bind_values = $values;
+            }
         }
 
         return $this;
@@ -82,6 +113,8 @@ class MySqlTable
 
     public function get()
     {
+        global $inflector;
+
         $sql = "SELECT {$this->columns} FROM {$this->table_name}";
         if ($this->where) {
 
@@ -110,7 +143,7 @@ class MySqlTable
             $objects[] = $row;
         }
 
-        // --- Handle eager loaded relations ---
+        // --- Handle link relations
         if (!empty($this->link_relations) && !empty($objects)) {
 
             foreach ($this->link_relations as $relation) {
@@ -122,6 +155,24 @@ class MySqlTable
                     $this->linkRelationalData($obj, $relation_names);
                 }
             }
+        }
+
+        // --- Handle populate relations
+        if (!empty($this->populate_relations) && !empty($objects)) {
+
+            foreach ($this->populate_relations as $relation) {
+
+                /** populating each item of base data */
+                foreach ($objects as $item) {
+                    $col_name = $relation;
+                    $rel_name = $inflector->singularize($col_name);
+                    $current_table_singular = $inflector->singularize($this->table_name);
+                    $fk = $current_table_singular . '_id';
+                    $model_name = ucfirst($rel_name) . 'Model';
+                    $model_namespace = 'App\\Models\\' . $model_name;
+                    $item->$col_name = $model_namespace::where($fk, $item->id)->get();
+                }
+            }            
         }
 
         $this->reset();
@@ -147,19 +198,6 @@ class MySqlTable
         $this->limit(1);
         $results = $this->get();
         return $results ? $results[0] : null;
-    }
-
-    public function reset()
-    {
-        $this->columns = '*';
-        $this->where = [];
-        $this->limit = null;
-        $this->groupBy = null;
-        $this->orderBy = null;
-        $this->link_relations = [];
-        $this->where_bind_types = '';
-        $this->where_bind_values = [];
-        return $this;
     }
 
     /**

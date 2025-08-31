@@ -13,12 +13,13 @@ class DashboardController
     public function adminDashboard($request, $response)
     {
 
-        $accounts = AccountModel::all();
+        // populate: can fetch one to many records of table i.e. cards based on fk=account_id
+        $accounts = AccountModel::populate('cards')->populate('apps')->get();
 
-        foreach ($accounts as $account) {
-            $account->cards = CardModel::where(['account_id' => $account->id])->get();
-            $account->apps = AppModel::select()->where(['account_id' => $account->id])->get();
-        }
+        // foreach ($accounts as $account) {
+        //     $account->cards = CardModel::where(['account_id' => $account->id])->get();
+        //     $account->apps = AppModel::select()->where(['account_id' => $account->id])->get();
+        // }
 
         $pending_txns = TransactionModel::link('account.user')->where(['status' => 'pending'])->sort_by('created_at', 'DESC')->get();
 
