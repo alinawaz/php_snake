@@ -1,9 +1,5 @@
 <?php
-
-/**
- * Response Class
- * Homebank php framework
- */
+namespace Snake\Http;
 
 class Response
 {
@@ -69,6 +65,12 @@ class Response
         }
 
         return json_encode($data);
+    }
+
+    public function redirect($url)
+    {
+        header("Location: " . $url);
+        exit;
     }
 
     private function renderBladeSyntax($html, $data)

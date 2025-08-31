@@ -3,12 +3,15 @@
 namespace Snake\Http;
 
 use App\Services\AppService;
+use Snake\Http\Request;
+use Snake\Http\Response;
 
 class Router
 {
 
     private static $routes = [];
     private static $request = null;
+    private static $response = null;
 
     public static function get($path, $controllerAction)
     {
@@ -53,7 +56,7 @@ class Router
         $middleware = new $middleware_instance();
         $router_static_class = self::class;
         if ($middleware && is_callable($callback)) {
-            $middleware->handle($request, function($request) use($callback, $router_static_class) {
+            $middleware->handle($request, function ($request) use ($callback, $router_static_class) {
                 $callback($router_static_class);
             });
         } else {
@@ -61,12 +64,22 @@ class Router
         }
     }
 
-    private static function getRequestSingletonInstance() {
-        if(self::$request === NULL) {
-            $request = loadClass('snake.http.Request');
+    private static function getRequestSingletonInstance()
+    {
+        if (self::$request === NULL) {
+            $request = new Request();
             self::$request = $request;
         }
         return self::$request;
+    }
+
+    private static function getResponseSingletonInstance()
+    {
+        if (self::$response === NULL) {
+            $response = new Response();
+            self::$response = $response;
+        }
+        return self::$response;
     }
 
     public static function dispatch()
@@ -94,7 +107,7 @@ class Router
 
             if ($controller && method_exists($controller, $action)) {
                 $request = self::getRequestSingletonInstance();
-                $response = loadClass('snake.http.Response');
+                $response = self::getResponseSingletonInstance();
                 echo call_user_func([$controller, $action], $request, $response);
                 exit();
             } else {

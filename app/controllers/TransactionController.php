@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\TransactionModel;
@@ -7,6 +8,13 @@ use App\Services\BalanceService;
 class TransactionController
 {
 
+    public function index($request, $response) {
+
+        $result = TransactionModel::where(['id' => 1])->update(['status' => 'charged']);
+
+        var_dump($result);exit;
+
+    }
 
     public function approve($request, $response)
     {
@@ -16,27 +24,20 @@ class TransactionController
         // Re-syncing all accounts
         BalanceService::sync();
 
-        header("Location: /admin/dashboard");
-        exit;
+        $response->redirect('/admin/dashboard');
     }
 
     public function decline($request, $response)
     {
-        $txn_id = $request->body->id;
-        TransactionModel::where(['id' => $txn_id])->update(['status' => 'declined']);
+        $transaction = TransactionModel::where(['id' => $request->body->id])->update(['status' => 'declined']);
 
-        //Fetch transaction to get returned_account_id for crediting back to returned account
-        $txn = TransactionModel::where(['id' => $txn_id])->first();
-
-        if ($txn && !empty($txn->returned_account_id)) {
+        if ($transaction && !empty($transaction->returned_account_id)) {
 
             // Crediting back to returned account
-            $returned_account_id = intval($txn->returned_account_id);
-            $amount = floatval($txn->amount);
             TransactionModel::create([
-                'account_id' => $returned_account_id,
+                'account_id' => intval($transaction->returned_account_id),
                 'type' => 'credit',
-                'amount' => $amount,
+                'amount' => floatval($transaction->amount),
                 'message' => 'Charge reversed as declined by issuer bank.',
                 'status' => 'charged'
             ]);
@@ -45,7 +46,6 @@ class TransactionController
         // Re-syncing all accounts
         BalanceService::sync();
 
-        header("Location: /admin/dashboard");
-        exit;
+        $response->redirect('/admin/dashboard');
     }
 }

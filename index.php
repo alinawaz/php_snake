@@ -18,8 +18,6 @@ session_start();
 include_once './snake/global_helpers.php';
 
 /** Application bootstrap file */
-// include_once './snake/Application.php';
-
 use Snake\Application;
 
 $app = new Application();

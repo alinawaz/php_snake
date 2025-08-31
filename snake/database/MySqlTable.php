@@ -172,7 +172,7 @@ class MySqlTable
                     $model_namespace = 'App\\Models\\' . $model_name;
                     $item->$col_name = $model_namespace::where($fk, $item->id)->get();
                 }
-            }            
+            }
         }
 
         $this->reset();
@@ -261,8 +261,13 @@ class MySqlTable
         $result = $stmt->execute();
         $stmt->close();
 
+        $updated_entry = NULL;
+
+        if ($result) $updated_entry = $this->first();
+
         $this->reset();
-        return $result;
+
+        return $updated_entry;
     }
 
     public function delete()

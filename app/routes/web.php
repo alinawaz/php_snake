@@ -9,6 +9,8 @@ use Snake\Http\Router;
 Router::get('/', 'WelcomeController@index');
 Router::post('/auth', 'AuthController@login');
 
+Router::get('/transactions', 'TransactionController@index');
+
 Router::middleware('auth', function($router) {
 
 

@@ -1,16 +1,7 @@
 <?php
+namespace Snake\Http;
 
-/**
- * Request handling class for router
- * Homebank - Personal Banking Application php framework
- * (c) 2024 Ali Nawaz - MIT License
- * Request class for handling HTTP requests and extracting data
- * i.e. $request->body-> (all kind of data from request get/put/patch/post/delete & json data from request body, in short it will have all data sent by client in object form)
- * $request->header-> (all headers)
- * $request->method() (GET, POST, PUT, DELETE, PATCH)
- * $request->path() (URI path)
- * $request->$user will contain current logged in user info if session is active
- */
+use Snake\Http\Validation;
 
 class Request {
 
@@ -25,6 +16,10 @@ class Request {
         $this->path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $this->header = getallheaders();
         $this->body = $this->parseBody();
+    }
+
+    public function validate(array $rules) {
+        return (new Validation($this))->validate($rules);
     }
 
     private function parseBody() {
