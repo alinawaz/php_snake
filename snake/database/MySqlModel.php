@@ -1,10 +1,8 @@
 <?php
-// MySQL Model class for ORM-like functionality
-// Homebank - Personal Banking Application php framework
-// (c) 2024 Ali Nawaz - MIT License
 
+namespace Snake\Database;
 
-loadFile('snake.database.mysql_table');
+use Snake\Database\MySqlTable;
 
 class MySqlModel {
 

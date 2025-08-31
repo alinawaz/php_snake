@@ -1,20 +1,23 @@
 <?php
+namespace App\Services;
 
+use App\Models\AccountModel;
+use App\Models\TransactionModel;
 
 class BalanceService
 {
 
-    public function sync()
+    public static function sync()
     {
         // Fetching all accounts 
-        $accounts = model('AccountModel')->all();
+        $accounts = AccountModel::all();
         foreach ($accounts as $account) {
 
             // total balance
             $balance = 0.0;
 
             // Fetching account transactions
-            $transactions = model('TransactionModel')->where(['account_id' => $account->id, 'status' => 'charged']);
+            $transactions = TransactionModel::where(['account_id' => $account->id, 'status' => 'charged']);
             foreach ($transactions as $trx) {
                 if ($trx->type == 'credit') {
                     $balance += floatval($trx->amount);
@@ -24,17 +27,17 @@ class BalanceService
             }
 
             // Updating account balance
-            model('AccountModel')->where(['id' => $account->id])->update(['balance' => $balance]);
+            AccountModel::where(['id' => $account->id])->update(['balance' => $balance]);
         }
     }
 
-    public function syncAccount($account_id)
+    public static function syncAccount($account_id)
     {
         // total balance
         $balance = 0.0;
 
         // Fetching account transactions
-        $transactions = model('TransactionModel')->where(['account_id' => $account_id, 'status' => 'charged']);
+        $transactions = TransactionModel::where(['account_id' => $account_id, 'status' => 'charged']);
         foreach ($transactions as $trx) {
             if ($trx->type == 'credit') {
                 $balance += floatval($trx->amount);
@@ -44,6 +47,6 @@ class BalanceService
         }
 
         // Updating account balance
-        model('AccountModel')->where(['id' => $account_id])->update(['balance' => $balance]);
+        AccountModel::where(['id' => $account_id])->update(['balance' => $balance]);
     }
 }

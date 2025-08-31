@@ -1,5 +1,7 @@
 <?php
 
+namespace Snake\Database;
+
 class MySqlTable
 {
 
@@ -134,7 +136,8 @@ class MySqlTable
         $rel_name = $relation_names[$index];
         $lk = $rel_name . '_id';
         $model_name = ucfirst($rel_name) . 'Model';
-        $item->$rel_name = model($model_name)->find($item->$lk);
+        $model_namespace = 'App\\Models\\' . $model_name;
+        $item->$rel_name = $model_namespace::find($item->$lk);
 
         $this->linkRelationalData($item->$rel_name, $relation_names, ++$index);
     }

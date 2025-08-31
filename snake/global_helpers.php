@@ -8,53 +8,6 @@ $__models = [];
 global $__services;
 $__services = [];
 
-
-// handy method to fetch any model in singleton way
-function model($model_name) {
-
-    global $root_path;
-    global $__models;
-
-    foreach($__models as $name => $model) {
-        if($name == $model_name) return $model;
-    }
-
-    $model_file = $root_path . "/app/models/{$model_name}.php";
-    if (file_exists($model_file)) {
-        require_once $model_file;
-        if (class_exists($model_name)) {
-            $model = new $model_name();
-            $__models[$model_name] = $model;
-            return $model;
-        }
-    }
-
-    die('Unble to resolve model with name: ' . $model_name);
-}
-
-// handy method to fetch any service in singleton way
-function service($service_name) {
-
-    global $root_path;
-    global $__services;
-
-    foreach($__services as $name => $service) {
-        if($name == $service_name) return $service;
-    }
-
-    $service_file = $root_path . "/app/services/{$service_name}.php";
-    if (file_exists($service_file)) {
-        require_once $service_file;
-        if (class_exists($service_name)) {
-            $service = new $service_name();
-            $__services[$service_name] = $service;
-            return $service;
-        }
-    }
-
-    die('Unble to resolve service with name: ' . $service_name);
-}
-
 // handy method to get db instance
 function db() {
 
@@ -70,25 +23,6 @@ function attachView($name) {
     $view_file = $root_path . "/app/views/{$name}.php";
 
     include_once $view_file;
-}
-
-
-/**
- * @method loadModel
- * @param string $modelName
- * @return object|null
- */
-function loadModel($modelName)
-{
-    global $root_path;
-    $modelFile = $root_path . "/app/models/{$modelName}.php";
-    if (file_exists($modelFile)) {
-        require_once $modelFile;
-        if (class_exists($modelName)) {
-            return new $modelName();
-        }
-    }
-    return null;
 }
 
 /**

@@ -3,11 +3,10 @@
 // Homebank - Personal Banking Application php framework
 // (c) 2024 Ali Nawaz - MIT License
 
-session_start();
+namespace Snake;
 
-// Loading configuration
-$database_config = loadConfiguration('database');
-$app_config = loadConfiguration('app');
+use Snake\Http\Router;
+use Snake\Database\MySQL;
 
 // Loading MySql Database class & making it globally available
 global $db;
@@ -36,15 +35,14 @@ class Application
     public function setupDatabase()
     {
         global $db;
-        $db = loadClass('snake.database.MySQL', $this->database_config);
+        $db = new MySQL($this->database_config);
         if (!$db) {
             die("HomeBank Framework Error: Failed to load database class.");
         }
     }
 
     public function setupRouting() {
-        // Loading router class
-        loadFile('snake.http.Router');
+
         // loading user web routes
         loadFile('app.routes.web');
 

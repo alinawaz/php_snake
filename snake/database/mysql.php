@@ -1,9 +1,7 @@
 <?php
-/**
- * MySQL database connection and operations class
- * PHP Snake framework
- * (c) 2024 Ali Nawaz - MIT License
- */
+
+namespace Snake\Database;
+
 class MySQL {
 
     private $conn;
@@ -13,8 +11,8 @@ class MySQL {
     }
 
     private function connect($config) {
-        $config = $config[0];
-        $this->conn = new mysqli(
+        // $config = $config[0];
+        $this->conn = new \mysqli(
             $config['host'], 
             $config['username'], 
             $config['password'], 

@@ -1,6 +1,8 @@
 <?php
 
-loadFile('snake.database.mysql_model');
+namespace App\Models;
+
+use Snake\Database\MySqlModel;
 
 class UserModel extends MySqlModel
 {

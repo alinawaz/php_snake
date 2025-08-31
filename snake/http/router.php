@@ -1,11 +1,8 @@
 <?php
 
-/**
- * Router class to handle HTTP routing
- * Homebank - Personal Banking Application php framework
- * (c) 2024 Ali Nawaz - MIT License
- * Uses a simple routing mechanism to map URLs to controller actions
- */
+namespace Snake\Http;
+
+use App\Services\AppService;
 
 class Router
 {
@@ -49,17 +46,18 @@ class Router
      *   $router->get('/dashboard', 'DashboardController@index');
      * });
      */
-    public static function middleware($middleware_class, $callback)
+    public static function middleware($middleware_name, $callback)
     {
         $request = self::getRequestSingletonInstance();
-        $middleware = loadClass("app.middlewares.{$middleware_class}");
+        $middleware_instance = AppService::middlewares()[$middleware_name];
+        $middleware = new $middleware_instance();
         $router_static_class = self::class;
         if ($middleware && is_callable($callback)) {
             $middleware->handle($request, function($request) use($callback, $router_static_class) {
                 $callback($router_static_class);
             });
         } else {
-            die("Router Error: Middleware class {$middleware_class} not found or not callable.");
+            die("Router Error: Middleware class {$middleware_name} not found or not callable.");
         }
     }
 
@@ -88,10 +86,11 @@ class Router
 
         // Check if route exists
         if (isset(self::$routes[$method][$uri])) {
-            list($controllerName, $action) = explode('@', self::$routes[$method][$uri]);
+            list($controller_name, $action) = explode('@', self::$routes[$method][$uri]);
 
             // Load controller
-            $controller = loadClass("app.controllers.{$controllerName}");
+            $controller_namespace = 'App\\Controllers\\' . $controller_name;
+            $controller = new $controller_namespace;
 
             if ($controller && method_exists($controller, $action)) {
                 $request = self::getRequestSingletonInstance();
@@ -99,7 +98,7 @@ class Router
                 echo call_user_func([$controller, $action], $request, $response);
                 exit();
             } else {
-                self::renderError(['code' => 500, 'message' => "Controller or method not found: {$controllerName}@{$action}"]);
+                self::renderError(['code' => 500, 'message' => "Controller or method not found: {$controller_name}@{$action}"]);
             }
         } else {
             self::renderError(['code' => 404, 'message' => "Route not found for [{$method}] {$uri}"]);
@@ -119,7 +118,7 @@ class Router
         }
 
         // Reading view file
-        $view_file = $root_path . '/homebank/http/templates/error.php';
+        $view_file = $root_path . '/snake/http/templates/error.php';
         include_once $view_file;
         die();
     }

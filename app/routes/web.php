@@ -4,10 +4,12 @@
  * Web routes
  */
 
+use Snake\Http\Router;
+
 Router::get('/', 'WelcomeController@index');
 Router::post('/auth', 'AuthController@login');
 
-Router::middleware('AuthMiddleware', function($router) {
+Router::middleware('auth', function($router) {
 
 
     $router::get('/admin/dashboard', 'DashboardController@adminDashboard');
