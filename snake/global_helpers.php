@@ -16,6 +16,22 @@ function db() {
     return $db;
 }
 
+if (!function_exists('dd')) {
+    function dd(...$vars) {
+        echo '<pre style="background:#282c34;color:#abb2bf;padding:15px;border-radius:8px;font-size:13px;font-family:Consolas,Monaco,monospace;">';
+
+        foreach ($vars as $var) {
+            ob_start();
+            var_dump($var);
+            $dump = ob_get_clean();
+            echo htmlspecialchars($dump) . "\n";
+        }
+
+        echo '</pre>';
+        exit;
+    }
+}
+
 function attachView($name) {
 
     global $root_path;

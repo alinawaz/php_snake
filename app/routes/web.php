@@ -14,11 +14,11 @@ Router::get('/transactions', 'TransactionController@index');
 
 Router::middleware('auth', function($router) {
 
-    $router::get('/logout', 'AuthController@logout');
+    $router->get('/logout', 'AuthController@logout');
 
-    $router::get('/admin/dashboard', 'DashboardController@adminDashboard');
-    $router::post('/admin/transactions/approve', 'TransactionController@approve');
-    $router::post('/admin/transactions/decline', 'TransactionController@decline');
+    $router->get('/admin/dashboard', 'DashboardController@adminDashboard');
+    $router->post('/admin/transactions/approve', 'TransactionController@approve');
+    $router->post('/admin/transactions/decline', 'TransactionController@decline');
     
 
 });
