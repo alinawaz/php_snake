@@ -9,6 +9,6 @@
     <li><a href="/admin_users.php">💰 Users</a></li>
     <li><a href="./sync.php">📝 Sync</a></li>
     <li><a href="./admin_bank_charges.php">📝 Bank Charges</a></li>
-    <li><a href="logout.php">🚪 Logout</a></li>
+    <li><a href="/logout">🚪 Logout</a></li>
   </ul>
 </div>

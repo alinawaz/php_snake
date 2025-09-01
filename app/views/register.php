@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Signup - Bank App</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <title>HomeBank | Register</title>
+  <link rel="stylesheet" href="@assets(style.css)">
   <script>
     async function handleSignup(e) {
       e.preventDefault();
+      const name = document.querySelector('[name="name"]').value;
       const username = document.querySelector('[name="username"]').value;
       const password = document.querySelector('[name="password"]').value;
       const errorMsg = document.getElementById('error-msg');
@@ -14,14 +15,14 @@
       errorMsg.textContent = '';
       successMsg.textContent = '';
 
-      const res = await fetch('controllers/auth.php?action=signup', {
+      const res = await fetch('/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ name, username, password })
       });
       const data = await res.json();
       if (data.success) {
-        successMsg.innerHTML = `${data.message} <a href='index.php'>Login here</a>`;
+        successMsg.innerHTML = `${data.message} <a href='/'>Login here</a>`;
       } else {
         errorMsg.textContent = data.error || 'Signup failed';
       }

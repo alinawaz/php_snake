@@ -5,10 +5,13 @@ namespace App\Controllers;
 use App\Models\TransactionModel;
 use App\Services\BalanceService;
 
+use Snake\Http\Request;
+use Snake\Http\Response;
+
 class TransactionController
 {
 
-    public function index($request, $response) {
+    public function index(Request $request, Response $response) {
 
         $result = TransactionModel::where(['id' => 1])->update(['status' => 'charged']);
 
@@ -16,7 +19,7 @@ class TransactionController
 
     }
 
-    public function approve($request, $response)
+    public function approve(Request $request, Response $response)
     {
         $txn_id = $request->body->id;
         TransactionModel::where(['id' => $txn_id])->update(['status' => 'charged']);
@@ -27,7 +30,7 @@ class TransactionController
         $response->redirect('/admin/dashboard');
     }
 
-    public function decline($request, $response)
+    public function decline(Request $request, Response $response)
     {
         $transaction = TransactionModel::where(['id' => $request->body->id])->update(['status' => 'declined']);
 

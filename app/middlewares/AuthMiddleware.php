@@ -14,7 +14,7 @@ class AuthMiddleware {
     public function handle($request, $next) {
 
         if (!isset($_SESSION['user_id'])) {
-            header('Location: /login');
+            header('Location: /');
             exit();
         }else {
             $request->user = UserModel::find($_SESSION['user_id']);

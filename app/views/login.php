@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bank Login</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>HomeBank | Login</title>
+    <link rel="stylesheet" href="@assets(style.css)">
     <script>
         async function handleLogin(e) {
             e.preventDefault();
@@ -25,7 +25,7 @@
             });
             const data = await res.json();
             if (data.success) {
-                window.location.href = 'dashboard.php';
+                window.location.href = '/admin/dashboard';
             } else {
                 errorMsg.textContent = data.error || 'Login failed';
             }

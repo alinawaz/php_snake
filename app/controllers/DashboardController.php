@@ -5,10 +5,13 @@ namespace App\Controllers;
 use App\Models\AccountModel;
 use App\Models\TransactionModel;
 
+use Snake\Http\Request;
+use Snake\Http\Response;
+
 class DashboardController
 {
 
-    public function adminDashboard($request, $response)
+    public function adminDashboard(Request $request, Response $response)
     {
 
         // populate: can fetch one to many records of table i.e. cards based on fk=account_id
