@@ -35,6 +35,7 @@
     <p class="login-subtitle">Join our bank system in a few seconds</p>
     
     <form class="login-form" onsubmit="handleSignup(event)">
+      <input type="text" name="name" placeholder="👤 Choose name" required>
       <input type="text" name="username" placeholder="👤 Choose Username" required>
       <input type="password" name="password" placeholder="🔒 Choose Password" required>
       <button type="submit">Sign Up</button>

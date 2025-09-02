@@ -15,7 +15,7 @@ class AuthController
     {
 
         return $response->view('login');
-    }
+    }    
 
     public function authenticate(Request $request, Response $response)
     {
@@ -37,11 +37,17 @@ class AuthController
             Session::put('username', $user->username);
             Session::put('role', $user->role);
 
-            return $response->status(200)->json(['success' => true]);
+            return $response->status(200)->json(['success' => true, 'role' => $user->role ]);
         } else {
 
             return $response->status(401)->json(['success' => false, 'error' => 'Invalid username or password!']);
         }
+    }
+
+    public function signUp(Request $request, Response $response)
+    {
+
+        return $response->view('register');
     }
 
     public function register(Request $request, Response $response)
@@ -57,7 +63,7 @@ class AuthController
         }
 
         // Check if username already exists
-        $existing = UserModel::where(['username' => $request->body->username]);
+        $existing = UserModel::where(['username' => $request->body->username])->first();
         if ($existing) {
             return $response->status(409)->json(['success' => false, 'error' => 'Username already taken']);
         }
@@ -65,7 +71,7 @@ class AuthController
         $user = UserModel::create([
             'name' => $request->body->name,
             'username' => $request->body->username,
-            'password' => $request->body->password
+            'password' => password_hash($request->body->password, PASSWORD_DEFAULT)
         ]);
 
         if ($user) {

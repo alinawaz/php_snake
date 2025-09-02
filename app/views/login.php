@@ -25,7 +25,11 @@
             });
             const data = await res.json();
             if (data.success) {
-                window.location.href = '/admin/dashboard';
+                if (data.role == 'admin') {
+                    window.location.href = '/admin/dashboard';
+                } else if (data.role == 'user') {
+                    window.location.href = '/customer/dashboard';
+                }
             } else {
                 errorMsg.textContent = data.error || 'Login failed';
             }
@@ -42,7 +46,7 @@
             <input type="password" name="password" placeholder="🔒 Password" required>
             <button type="submit">Login</button>
         </form>
-        <p class="signup-link">Don’t have an account? <a href="signup.php">Sign up</a></p>
+        <p class="signup-link">Don’t have an account? <a href="/sign-up">Sign up</a></p>
         <p class="error-msg" id="error-msg"></p>
     </div>
 </body>

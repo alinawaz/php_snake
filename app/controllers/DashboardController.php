@@ -22,4 +22,13 @@ class DashboardController
 
         return $response->view('admin.dashboard', ['user' => $request->user, 'accounts' => $accounts, 'pending_txns' => $pending_txns]);
     }
+
+    public function customerDashboard(Request $request, Response $response)
+    {
+
+        // populate: can fetch one to many records of table i.e. cards based on fk=account_id
+        $accounts = AccountModel::populate('cards')->populate('apps')->where(['user_id' => $request->user->id])->get();
+
+        return $response->view('customer.dashboard', ['user' => $request->user, 'accounts' => $accounts]);
+    }
 }

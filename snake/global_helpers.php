@@ -8,8 +8,39 @@ $__models = [];
 global $__services;
 $__services = [];
 
+global $__request;
+global $__response;
+
+use Snake\Http\Request;
+use Snake\Http\Response;
+
+function getRequestInstance()
+{
+    global $__request;
+    if ($__request === NULL) {
+        $__request = new Request();
+    }
+    return $__request;
+}
+
+function getResponseInstance()
+{
+    global $__response;
+    if ($__response === NULL) {
+        $__response = new Response();
+    }
+    return $__response;
+}
+
+function url()
+{
+    $request = getRequestInstance();
+    return $request->path();
+}
+
 // handy method to get db instance
-function db() {
+function db()
+{
 
     global $db;
 
@@ -17,7 +48,8 @@ function db() {
 }
 
 if (!function_exists('dd')) {
-    function dd(...$vars) {
+    function dd(...$vars)
+    {
         echo '<pre style="background:#282c34;color:#abb2bf;padding:15px;border-radius:8px;font-size:13px;font-family:Consolas,Monaco,monospace;">';
 
         foreach ($vars as $var) {
@@ -32,7 +64,8 @@ if (!function_exists('dd')) {
     }
 }
 
-function attachView($name) {
+function attachView($name)
+{
 
     global $root_path;
     $name = str_replace('.', '/', $name);
@@ -69,7 +102,7 @@ function loadClass($className, ...$args)
     if (file_exists($classFile)) {
         require_once $classFile;
         $shortClassName = explode('.', $className);
-        $shortClassName = $shortClassName[count($shortClassName)-1];
+        $shortClassName = $shortClassName[count($shortClassName) - 1];
         if (class_exists($shortClassName)) {
             if ((!empty($args))) {
                 return new $shortClassName($args);
@@ -94,7 +127,7 @@ function loadFile($dot_notation_path)
     $file = __DIR__ . "/../{$path}.php";
     if (file_exists($file)) {
         require_once $file;
-    }else{
+    } else {
         die('snake.helper.loadFile: Unable to load file {' . $dot_notation_path . '}');
     }
     return;

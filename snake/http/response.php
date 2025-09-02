@@ -1,4 +1,5 @@
 <?php
+
 namespace Snake\Http;
 
 class Response
@@ -76,52 +77,60 @@ class Response
     private function renderBladeSyntax($html, $data)
     {
 
-        // Re-Globalizing the passed data variables for rendering blade helpers
-        if ($data != NULL) {
-            foreach ($data as $var => $val) {
-                $$var = $val;
-            }
-        }
-
         global $root_path;
 
-        // 1. Regex to match all @layout(...) occurrences
-        $pattern = '/@layout\((.*?)\)/';
+        /* 1. @layout(...) */
+        $html = preg_replace_callback('/@layout\((.*?)\)/', function ($matches) use ($root_path, $data) {
 
-        // Find all occurrences
-        preg_match_all($pattern, $html, $matches);
+            if ($data != NULL) {
+                foreach ($data as $var => $val) {
+                    $$var = $val;
+                }
+            }
 
-        // $matches[1] will contain all strings inside parentheses
-        foreach ($matches[1] as $layout) {
-
-            // Example: replace @layout(...) with some PHP include
-            $name = str_replace('.', '/', $layout);
+            // Convert dot notation to path
+            $name = str_replace('.', '/', trim($matches[1], "'\" "));
             $view_file = $root_path . '/app/views/' . $name . '.php';
+
+            if (!file_exists($view_file)) {
+                return "<!-- layout not found: {$name} -->";
+            }
+
+            // Capture output of included file
             ob_start();
             include_once $view_file;
             $include_html = ob_get_clean();
 
-            $include_html = $this->renderBladeSyntax($include_html, $data);
+            // Re-run through Blade-like renderer
+            if (method_exists($this, 'renderBladeSyntax')) {
+                $include_html = $this->renderBladeSyntax($include_html, $data);
+            }
 
-            // Replace in original HTML
-            $html = str_replace("@layout($layout)", $include_html, $html);
-        }
+            return $include_html;
+        }, $html);
 
-        // 2. Regex to match all @assets(...) occurrences
-        $pattern = '/@assets\((.*?)\)/';
+        /* 2. @assets(...) */
+        $html = preg_replace_callback('/@assets\((.*?)\)/', function ($matches) {
+            return '/assets/' . trim($matches[1], "'\" ");
+        }, $html);
 
-        // Find all occurrences
-        preg_match_all($pattern, $html, $matches);
+        /* 3. {{...}} */
+        $html = preg_replace_callback('/\{\{\s*(.*?)\s*\}\}/', function ($matches) {
+            return '<?php echo ' . $matches[1] . '; ?>';
+        }, $html);
 
-        // $matches[1] will contain all strings inside parentheses
-        foreach ($matches[1] as $assets) {
+        // Matches @if(...)
+        $html = preg_replace('/@if\s*\((.*?)\)/', '<?php if ($1): ?>', $html);
 
-            // Example: replace @assets(...) with some PHP include
-            $asset_path = '/' . 'assets/' . $assets;
+        // Matches @elseif(...)
+        $html = preg_replace('/@elseif\s*\((.*?)\)/', '<?php elseif ($1): ?>', $html);
 
-            // Replace in original HTML
-            $html = str_replace("@assets($assets)", $asset_path, $html);
-        }
+        // Matches @else
+        $html = preg_replace('/@else\b/', '<?php else: ?>', $html);
+
+        // Matches @endif
+        $html = preg_replace('/@endif\b/', '<?php endif; ?>', $html);
+
 
         // Output or return modified HTML
         return $html;

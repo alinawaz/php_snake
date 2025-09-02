@@ -3,40 +3,36 @@
 namespace Snake\Http;
 
 use App\Services\AppService;
-use Snake\Http\Request;
-use Snake\Http\Response;
-use Snake\Http\ProtectedRouter;
+use Snake\Http\Route;
 
 class Router
 {
 
     private static $routes = [];
-    private static $request = null;
-    private static $response = null;
 
     public static function get($path, $controllerAction)
     {
-        self::$routes['GET'][$path] = ['action' => $controllerAction, 'middleware' => NULL];
+        self::$routes['GET'][$path] = ['action' => $controllerAction, 'middlewares' => []];
     }
 
     public static function post($path, $controllerAction)
     {
-        self::$routes['POST'][$path] = ['action' => $controllerAction, 'middleware' => NULL];
+        self::$routes['POST'][$path] = ['action' => $controllerAction, 'middlewares' => []];
     }
 
     public static function put($path, $controllerAction)
     {
-        self::$routes['PUT'][$path] = ['action' => $controllerAction, 'middleware' => NULL];
+        self::$routes['PUT'][$path] = ['action' => $controllerAction, 'middlewares' => []];
     }
 
     public static function delete($path, $controllerAction)
     {
-        self::$routes['DELETE'][$path] = ['action' => $controllerAction, 'middleware' => NULL];
+        self::$routes['DELETE'][$path] = ['action' => $controllerAction, 'middlewares' => []];
     }
 
     public static function patch($path, $controllerAction)
     {
-        self::$routes['PATCH'][$path] = ['action' => $controllerAction, 'middleware' => NULL];
+        self::$routes['PATCH'][$path] = ['action' => $controllerAction, 'middlewares' => []];
     }
 
     /**
@@ -50,15 +46,15 @@ class Router
      *   $router->get('/dashboard', 'DashboardController@index');
      * });
      */
-    public static function middleware($middleware_name, $callback)
+    public static function middleware($name, $callback)
     {
         if (is_callable($callback)) {
-            $grouped_router_instance = new ProtectedRouter($middleware_name);
+            $grouped_router_instance = new Route([$name]);
             $callback($grouped_router_instance);
             self::$routes = self::mergeRoutes(self::$routes, $grouped_router_instance->getRoutes());
             // dd(self::$routes);
         } else {
-            die("Router Error: Middleware class {$middleware_name} not found or not callable.");
+            die("Router Error: Middleware class {$name} not found or not callable.");
         }
     }
 
@@ -68,24 +64,6 @@ class Router
             $open_routes[$method] = array_merge($open_routes[$method], $grouped_routes[$method]);
         }
         return $open_routes;
-    }
-
-    private static function getRequestSingletonInstance()
-    {
-        if (self::$request === NULL) {
-            $request = new Request();
-            self::$request = $request;
-        }
-        return self::$request;
-    }
-
-    private static function getResponseSingletonInstance()
-    {
-        if (self::$response === NULL) {
-            $response = new Response();
-            self::$response = $response;
-        }
-        return self::$response;
     }
 
     public static function dispatch()
@@ -102,28 +80,17 @@ class Router
             $uri = rtrim($uri, '/');
         }
 
-        // var_dump($method, $uri);
+        // dd(self::$routes);
 
         // Check if route exists
         if (isset(self::$routes[$method][$uri])) {
 
-            $request = self::getRequestSingletonInstance();
-
             $route_action = self::$routes[$method][$uri]['action'];
-            $route_middleware = self::$routes[$method][$uri]['middleware'];
+            $route_middlewares = self::$routes[$method][$uri]['middlewares'];
 
-            if ($route_middleware) {
-                $middleware_instance = AppService::middlewares()[$route_middleware];
-                $middleware = new $middleware_instance();
-                if ($middleware) {
-                    $middleware->handle($request, function ($request) use ($route_action) {
-                        static::triggerController($route_action);
-                    });
-                } else {
-                    die("Router Error: Middleware class {$route_middleware} not found or not callable.");
-                }
+            if (count($route_middlewares) > 0) {
+                static::chainMiddlewares($route_middlewares, $route_action);
             } else {
-
                 static::triggerController($route_action);
             }
         } else {
@@ -131,10 +98,31 @@ class Router
         }
     }
 
+    private static function chainMiddlewares($middlewares, $route_action, $index = 0)
+    {
+        // var_dump($index, ' < ', (count($middlewares)));
+        if ($index < count($middlewares)) {
+            $middleware = $middlewares[$index];
+
+            $middleware_instance = AppService::middlewares()[$middleware];
+            $middleware = new $middleware_instance();
+            $request = getRequestInstance();
+
+            $middleware->handle($request, function ($request) use ($route_action, $middlewares, $index) {
+                // var_dump($index, ' == ', (count($middlewares)-1));
+                if ($index == (count($middlewares) - 1)) {
+                    static::triggerController($route_action);
+                } else {
+                    static::chainMiddlewares($middlewares, $route_action, ++$index);
+                }
+            });
+        }
+    }
+
     private static function triggerController($route_action)
     {
-        $request = self::getRequestSingletonInstance();
-        $response = self::getResponseSingletonInstance();
+        $request = getRequestInstance();
+        $response = getResponseInstance();
 
         list($controller_name, $action) = explode('@', $route_action);
 
