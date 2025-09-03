@@ -12,6 +12,10 @@ class Request {
     public $user;
 
     public function __construct() {
+        $this->refresh();
+    }
+
+    public function refresh() {
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $this->header = getallheaders();
@@ -51,6 +55,15 @@ class Request {
 
     public function path() {
         return $this->path;
+    }
+
+    /**
+     * Add route params into $this->body
+     */
+    public function addParams(array $params) {
+        $current = (array) $this->body;
+        $merged = array_merge($current, $params);
+        $this->body = (object) $merged;
     }
 
 }

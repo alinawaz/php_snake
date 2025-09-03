@@ -14,6 +14,6 @@
   <!-- Main -->
   <div class="main-content">
     <div class="header">
-      <h1>Welcome, <?= ucfirst(htmlspecialchars($user->username)) ?></h1>
-      <p>Your role: <strong><?= htmlspecialchars($user->role) ?></strong></p>
+      <h1>Welcome, <?= ucfirst(htmlspecialchars(auth()->user->username)) ?></h1>
+      <p>Your role: <strong><?= htmlspecialchars(auth()->user->role) ?></strong></p>
     </div>

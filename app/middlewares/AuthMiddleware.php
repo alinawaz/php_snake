@@ -24,8 +24,9 @@ class AuthMiddleware
 
             // Checking role
             // dd($request->user->role);
+            // dD(!str_contains($request->path(), '/admin') , ' && ', $request->path() != '/logout');
             if ($request->user->role == 'admin') {
-                if (!str_contains($request->path(), '/admin') && !$request->path() == '/logout') {
+                if (!str_contains($request->path(), '/admin') && $request->path() != '/logout') {
                     header('Location: /admin/dashboard');
                     exit();
                 }

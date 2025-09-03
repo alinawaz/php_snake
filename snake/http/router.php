@@ -35,24 +35,12 @@ class Router
         self::$routes['PATCH'][$path] = ['action' => $controllerAction, 'middlewares' => []];
     }
 
-    /**
-     * @method middleware
-     * @param $middleware_class string
-     * @param $callback callable
-     * Adds middleware to the router, callback will be given with instance of Router class to create group of routes with middleware
-     * Middleware_class should implement handle($request, $next) method, will be auto loaded from ./app/middlewares/ accordingly
-     * Example:
-     * $router->middleware('AuthMiddleware', function($router) {
-     *   $router->get('/dashboard', 'DashboardController@index');
-     * });
-     */
     public static function middleware($name, $callback)
     {
         if (is_callable($callback)) {
             $grouped_router_instance = new Route([$name]);
             $callback($grouped_router_instance);
             self::$routes = self::mergeRoutes(self::$routes, $grouped_router_instance->getRoutes());
-            // dd(self::$routes);
         } else {
             die("Router Error: Middleware class {$name} not found or not callable.");
         }
@@ -68,11 +56,7 @@ class Router
 
     public static function dispatch()
     {
-
-        // Detect request method (GET, POST, PUT, DELETE, PATCH)
         $method = $_SERVER['REQUEST_METHOD'];
-
-        // Detect request URI path (strip query string if present)
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         // Normalize (remove trailing slash except for root "/")
@@ -80,25 +64,43 @@ class Router
             $uri = rtrim($uri, '/');
         }
 
-        // dd(self::$routes);
-
-        // Check if route exists
-        if (isset(self::$routes[$method][$uri])) {
-
-            $route_action = self::$routes[$method][$uri]['action'];
-            $route_middlewares = self::$routes[$method][$uri]['middlewares'];
-
-            if (count($route_middlewares) > 0) {
-                static::chainMiddlewares($route_middlewares, $route_action);
-            } else {
-                static::triggerController($route_action);
-            }
-        } else {
-            self::renderError(['code' => 404, 'message' => "Route not found for [{$method}] {$uri}"]);
+        if (!isset(self::$routes[$method])) {
+            return self::renderError(['code' => 404, 'message' => "No routes for [{$method}]"]);
         }
+
+        foreach (self::$routes[$method] as $routePattern => $route) {
+            // Convert /user/:id/post/:slug → regex
+            $regex = preg_replace('#:([\w]+)#', '(?P<$1>[^/]+)', $routePattern);
+            $regex = "#^" . $regex . "$#";
+
+            if (preg_match($regex, $uri, $matches)) {
+                // Collect params
+                $params = [];
+                foreach ($matches as $key => $value) {
+                    if (!is_int($key)) {
+                        $params[$key] = $value;
+                    }
+                }
+
+                $route_action = $route['action'];
+                $route_middlewares = $route['middlewares'];
+
+                if (count($route_middlewares) > 0) {
+                    static::chainMiddlewares($params, $route_middlewares, $route_action);
+                } else {
+                    // Inject params into request
+                    $request = getRequestInstance();
+                    $request->addParams($params);
+                    static::triggerController($route_action);
+                }
+                return; // Stop after first match
+            }
+        }
+
+        self::renderError(['code' => 404, 'message' => "Route not found for [{$method}] {$uri}"]);
     }
 
-    private static function chainMiddlewares($middlewares, $route_action, $index = 0)
+    private static function chainMiddlewares($params, $middlewares, $route_action, $index = 0)
     {
         // var_dump($index, ' < ', (count($middlewares)));
         if ($index < count($middlewares)) {
@@ -108,12 +110,15 @@ class Router
             $middleware = new $middleware_instance();
             $request = getRequestInstance();
 
-            $middleware->handle($request, function ($request) use ($route_action, $middlewares, $index) {
+            $middleware->handle($request, function ($request) use ($route_action, $middlewares, $index, $params) {
                 // var_dump($index, ' == ', (count($middlewares)-1));
                 if ($index == (count($middlewares) - 1)) {
+                    // Inject params into request
+                    $request = getRequestInstance();
+                    $request->addParams($params);
                     static::triggerController($route_action);
                 } else {
-                    static::chainMiddlewares($middlewares, $route_action, ++$index);
+                    static::chainMiddlewares($params, $middlewares, $route_action, ++$index);
                 }
             });
         }

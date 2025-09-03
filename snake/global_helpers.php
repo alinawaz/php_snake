@@ -20,6 +20,7 @@ function getRequestInstance()
     if ($__request === NULL) {
         $__request = new Request();
     }
+    // $__request->refresh();
     return $__request;
 }
 
@@ -37,6 +38,15 @@ function url()
     $request = getRequestInstance();
     return $request->path();
 }
+
+function auth()
+{
+    $request = getRequestInstance();
+    $stdClass = new \StdClass;
+    $stdClass->user = $request->user;
+    return $stdClass;
+}
+
 
 // handy method to get db instance
 function db()

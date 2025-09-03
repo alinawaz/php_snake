@@ -20,6 +20,7 @@ Router::middleware('auth', function ($router) {
     /** Customer Flows */
     $router->group('/customer', function ($router) {
         $router->get('/dashboard', 'DashboardController@customerDashboard');
+        $router->get('/accounts', 'AccountController@index');
     });
 
     /** Admin Flows */
@@ -27,5 +28,10 @@ Router::middleware('auth', function ($router) {
         $router->get('/dashboard', 'DashboardController@adminDashboard');
         $router->post('/transactions/approve', 'TransactionController@approve');
         $router->post('/transactions/decline', 'TransactionController@decline');
+
+        $router->get('/customers', 'UserController@index');
+        $router->post('/customers/activate', 'UserController@activate');
+
+        $router->get('/customers/account/:id', 'AccountController@show');
     });
 });
