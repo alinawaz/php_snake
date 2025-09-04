@@ -49,7 +49,11 @@ class Router
     private static function mergeRoutes($open_routes, $grouped_routes)
     {
         foreach ($grouped_routes as $method => $url) {
-            $open_routes[$method] = array_merge($open_routes[$method], $grouped_routes[$method]);
+            if(isset($open_routes[$method])) {
+                $open_routes[$method] = array_merge($open_routes[$method], $grouped_routes[$method]);
+            }else{
+                $open_routes[$method] = $grouped_routes[$method];
+            }
         }
         return $open_routes;
     }

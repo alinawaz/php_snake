@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\TransactionModel;
+use App\Models\AccountModel;
 use App\Services\BalanceService;
 
 use Snake\Http\Request;
@@ -50,5 +51,28 @@ class TransactionController
         BalanceService::sync();
 
         $response->redirect('/admin/dashboard');
+    }
+
+    public function create(Request $request, Response $response)
+    {
+
+        $account_number = $request->body->a;
+
+        return $response->view('admin.transactions.create', ['account_number' => $account_number]);
+    }
+
+    public function store(Request $request, Response $response)
+    {
+
+        $account = AccountModel::where(['account_number' => $request->body->account_number])->first();
+
+        TransactionModel::create([
+            'account_id' => $account->id,
+            'type' => $request->body->type,
+            'amount' => $request->body->amount,
+            'message' => $request->body->note
+        ]);
+
+        return $response->view('admin.transactions.create', ['account_number' => '', 'success' => 'Transaction created successfully.']);
     }
 }

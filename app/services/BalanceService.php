@@ -17,7 +17,7 @@ class BalanceService
             $balance = 0.0;
 
             // Fetching account transactions
-            $transactions = TransactionModel::where(['account_id' => $account->id, 'status' => 'charged']);
+            $transactions = TransactionModel::where(['account_id' => $account->id, 'status' => 'charged'])->get();
             foreach ($transactions as $trx) {
                 if ($trx->type == 'credit') {
                     $balance += floatval($trx->amount);
@@ -37,7 +37,7 @@ class BalanceService
         $balance = 0.0;
 
         // Fetching account transactions
-        $transactions = TransactionModel::where(['account_id' => $account_id, 'status' => 'charged']);
+        $transactions = TransactionModel::where(['account_id' => $account_id, 'status' => 'charged'])->get();
         foreach ($transactions as $trx) {
             if ($trx->type == 'credit') {
                 $balance += floatval($trx->amount);

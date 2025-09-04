@@ -19,6 +19,7 @@
               <th class="px-4 py-3">Balance</th>
               <th class="px-4 py-3">Cards</th>
               <th class="px-4 py-3">Apps</th>
+              <th class="px-4 py-3">Sync</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
@@ -54,6 +55,9 @@
                     echo "<span class='text-gray-400'>No apps</span>";
                   }
                   ?>
+                </td>
+                <td>
+                  <a href="/admin/accounts/<?php echo $account->id; ?>/sync">Sync</a>
                 </td>
               </tr>
             <?php endforeach; ?>

@@ -33,5 +33,12 @@ Router::middleware('auth', function ($router) {
         $router->post('/customers/activate', 'UserController@activate');
 
         $router->get('/accounts/:id', 'AccountController@show');
+        $router->post('/accounts/:id/status', 'AccountController@status');
+        $router->get('/accounts/:id/sync', 'AccountController@sync');
+
+        $router->post('/cards/create', 'CardController@create');
+
+        $router->get('/transactions/create', 'TransactionController@create');
+        $router->post('/transactions/store', 'TransactionController@store');
     });
 });
