@@ -29,7 +29,7 @@
                   <?php
                   if ($customer->accounts) {
                     foreach ($customer->accounts as $account) {
-                      echo "<div class='text-gray-700'>📝 <a href='/admin/customers/account/" . $account->id . "'>" . htmlspecialchars($account->account_number) . "</a> <span class='text-xs text-gray-500'>(" . htmlspecialchars($account->balance) . " | " . $account->status . ")</span></div>";
+                      echo "<div class='text-gray-700'>📝 <a href='/admin/accounts/" . $account->id . "'>" . htmlspecialchars($account->account_number) . "</a> <span class='text-xs text-gray-500'>(" . htmlspecialchars($account->balance) . " | " . $account->status . ")</span></div>";
                     }
                   } else {
                     if($customer->status == 'pending') {

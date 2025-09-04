@@ -17,7 +17,7 @@ class UserController
 
         $users = UserModel::populate('accounts')->get();
         
-        return $response->view('admin.customer_listing', ['customers' => $users]);
+        return $response->view('admin.customers.index', ['customers' => $users]);
     }
 
     // @POST /admin/customers/activate

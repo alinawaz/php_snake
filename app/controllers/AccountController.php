@@ -23,7 +23,7 @@ class AccountController
 
         $accounts = AccountModel::populate('cards')->populate('apps')->where(['user_id' => $request->user->id, 'id' => $request->body->id])->first();
 
-        return $response->view('admin.account_listing', ['accounts' => $accounts]);
+        return $response->view('admin.accounts.index', ['accounts' => $accounts]);
     }
 
 }

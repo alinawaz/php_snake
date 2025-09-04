@@ -32,6 +32,6 @@ Router::middleware('auth', function ($router) {
         $router->get('/customers', 'UserController@index');
         $router->post('/customers/activate', 'UserController@activate');
 
-        $router->get('/customers/account/:id', 'AccountController@show');
+        $router->get('/accounts/:id', 'AccountController@show');
     });
 });
